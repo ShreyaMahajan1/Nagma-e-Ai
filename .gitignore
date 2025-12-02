@@ -1,12 +1,11 @@
 # Dependencies
 node_modules/
-nextjs-app/node_modules/
 
 # Next.js
-nextjs-app/.next/
-nextjs-app/out/
-nextjs-app/build/
-nextjs-app/dist/
+.next/
+out/
+build/
+dist/
 
 # Environment variables
 .env
@@ -14,11 +13,6 @@ nextjs-app/dist/
 .env.development.local
 .env.test.local
 .env.production.local
-nextjs-app/.env
-nextjs-app/.env.local
-nextjs-app/.env.development.local
-nextjs-app/.env.test.local
-nextjs-app/.env.production.local
 
 # Logs
 *.log
