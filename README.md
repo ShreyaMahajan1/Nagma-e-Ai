@@ -13,7 +13,7 @@
 
 ### 🎤 **Songwriting Assistance**
 - **Find Rhymes** - Generate singable, rhythmic lyrical lines that continue your song
-- **COntinue song** - Create catchy song-like stanzas with emotional depth
+- **Continue song** - Create catchy song-like stanzas with emotional depth
 - **Explore Styles** - Get AI suggestions for music genres that fit your lyrics
 
 ### 🎭 **Emotion Analysis**
@@ -241,5 +241,6 @@ Made with ❤️ and AI
 
 
 **⭐ If you like this project, please give it a star on GitHub!**
+
 
 
