@@ -12,9 +12,9 @@
 ## ✨ Features
 
 ### 🎤 **Songwriting Assistance**
-- **Singing Lines** - Generate singable, rhythmic lyrical lines that continue your song
-- **Next Lines** - Create catchy song-like stanzas with emotional depth
-- **Music Styles** - Get AI suggestions for music genres that fit your lyrics
+- **Find Rhymes** - Generate singable, rhythmic lyrical lines that continue your song
+- **COntinue song** - Create catchy song-like stanzas with emotional depth
+- **Explore Styles** - Get AI suggestions for music genres that fit your lyrics
 
 ### 🎭 **Emotion Analysis**
 - Analyzes lyrics for 6 emotions: Happy, Sad, Angry, Romantic, Energetic, Melancholic
@@ -241,4 +241,5 @@ Made with ❤️ and AI
 
 
 **⭐ If you like this project, please give it a star on GitHub!**
+
 
