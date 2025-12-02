@@ -120,7 +120,6 @@
 - **AI:** Google Gemini 2.5 Flash
 - **Voice:** Web Speech API (Recognition & Synthesis)
 - **Deployment:** Vercel-ready
-
 ---
 
 ## 📁 Project Structure
@@ -241,6 +240,7 @@ Made with ❤️ and AI
 
 
 **⭐ If you like this project, please give it a star on GitHub!**
+
 
 
 
