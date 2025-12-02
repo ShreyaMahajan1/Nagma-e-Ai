@@ -217,19 +217,12 @@ export default function PoetryCompanionPage() {
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
 
     if (!SpeechRecognition) {
-      console.warn('Speech recognition not supported in this browser.')
       setIsVoiceFlowRunning(false)
       return
     }
 
-    console.log('🎤 Creating speech recognition...')
     const recognition = new SpeechRecognition()
-    
-    // Always use en-US for best results (works for both English and Hinglish)
-    const recognitionLang = 'en-US'
-    console.log('🎤 Setting recognition language to:', recognitionLang)
-    
-    recognition.lang = recognitionLang
+    recognition.lang = 'en-US'
     recognition.interimResults = false // Simpler - only final results
     recognition.continuous = false // Stop after one phrase
     recognition.maxAlternatives = 1
@@ -238,106 +231,44 @@ export default function PoetryCompanionPage() {
     let fullTranscript = ''
 
     recognition.onstart = () => {
-      console.log('🎤 ✓ Speech recognition STARTED - speak your full question!')
       setIsRecording(true)
     }
 
-    recognition.onaudiostart = () => {
-      console.log('🎤 Audio capture started')
-    }
-
-    recognition.onsoundstart = () => {
-      console.log('🎤 Sound detected!')
-    }
-
-    recognition.onspeechstart = () => {
-      console.log('🎤 Speech detected!')
-    }
-
     recognition.onresult = (event: any) => {
-      console.log('🎤 ===== GOT RESULT EVENT =====')
-      console.log('🎤 Results count:', event.results.length)
-      console.log('🎤 Full event:', event)
-      
-      // Get the final transcript
       const result = event.results[event.results.length - 1]
       const transcript = result[0].transcript
-      const confidence = result[0].confidence
-      const isFinal = result.isFinal
-      
-      console.log(`🎤 Transcript: "${transcript}"`)
-      console.log(`🎤 Is final: ${isFinal}`)
-      console.log(`🎤 Confidence: ${confidence}`)
       
       if (transcript && transcript.trim()) {
         fullTranscript = transcript.trim()
         hasResult = true
-        console.log('🎤 ✓ Got valid transcript, stopping recognition')
         recognition.stop()
       }
     }
 
-    recognition.onspeechend = () => {
-      console.log('🎤 Speech ended')
-      // Recognition will auto-stop with continuous: false
-    }
-
-    recognition.onsoundend = () => {
-      console.log('🎤 Sound ended - waiting for results...')
-    }
-
-    recognition.onaudioend = () => {
-      console.log('🎤 Audio capture ended')
-    }
-    
-    recognition.onnomatch = () => {
-      console.log('🎤 ⚠ No match found for speech')
-    }
-
     recognition.onerror = (event: any) => {
-      console.error('🎤 ✗ Speech recognition error:', event.error)
-      console.error('🎤 Error details:', event)
       setIsRecording(false)
       setIsVoiceFlowRunning(false)
       
-      // Show user-friendly error
       if (event.error === 'no-speech') {
-        console.log('🎤 Error: No speech was detected')
         alert(language === 'hinglish' ? 'Kuch sunai nahi diya. Zor se bolo aur dobara try karo.' : 'No speech detected. Please speak louder and try again.')
       } else if (event.error === 'audio-capture') {
-        console.log('🎤 Error: Audio capture failed')
         alert(language === 'hinglish' ? 'Microphone kaam nahi kar raha. Check karo.' : 'Microphone not working. Please check it.')
       } else if (event.error === 'not-allowed') {
-        console.log('🎤 Error: Microphone permission denied')
         alert(language === 'hinglish' ? 'Microphone permission nahi mila. Browser settings check karo.' : 'Microphone permission denied. Check browser settings.')
       } else if (event.error === 'network') {
-        console.log('🎤 Error: Network issue')
         alert(language === 'hinglish' ? 'Internet connection check karo.' : 'Please check your internet connection.')
-      } else if (event.error === 'aborted') {
-        console.log('🎤 Speech recognition aborted')
-      } else {
-        console.log('🎤 Unknown error:', event.error)
+      } else if (event.error !== 'aborted') {
         alert(language === 'hinglish' ? `Error: ${event.error}` : `Error: ${event.error}`)
       }
     }
 
     recognition.onend = () => {
-      console.log('🎤 ===== Speech recognition ENDED =====')
-      console.log('🎤 Full transcript:', `"${fullTranscript}"`)
-      console.log('🎤 Transcript length:', fullTranscript.length)
-      console.log('🎤 hasResult:', hasResult)
       setIsRecording(false)
       
-      // Send the transcript if we have one
       if (fullTranscript.trim()) {
-        console.log('🎤 ✓ Sending transcript to callback:', fullTranscript.trim())
         onFinal(fullTranscript.trim())
       } else {
-        console.log('🎤 ✗ No transcript received')
-        console.log('🎤 This might be a microphone or language issue')
         setIsVoiceFlowRunning(false)
-        
-        // Show helpful message
         alert(language === 'hinglish' 
           ? 'Kuch sunai nahi diya. Microphone check karo aur phir se try karo.' 
           : 'No speech detected. Please check your microphone and try again.')
@@ -347,11 +278,8 @@ export default function PoetryCompanionPage() {
     recognitionRef.current = recognition
     
     try {
-      console.log('🎤 Calling recognition.start()...')
       recognition.start()
-      console.log('🎤 recognition.start() called successfully')
     } catch (err) {
-      console.error('🎤 ✗ Failed to start recognition:', err)
       setIsRecording(false)
       setIsVoiceFlowRunning(false)
       alert(language === 'hinglish' ? 'Microphone start nahi ho paaya.' : 'Failed to start microphone.')
@@ -369,29 +297,21 @@ export default function PoetryCompanionPage() {
       alert(language === 'hinglish' ? 'Voice input supported nahi hai.' : 'Voice input not supported.')
       return
     }
-
-    console.log('🎤 ===== VOICE INPUT BUTTON CLICKED =====')
     
     const recognition = new SpeechRecognition()
-    recognition.lang = 'en-US' // Always use English for better results
+    recognition.lang = 'en-US'
     recognition.interimResults = false
     recognition.continuous = false
     recognition.maxAlternatives = 1
 
     setIsRecording(true)
 
-    recognition.onstart = () => {
-      console.log('🎤 Voice input started - speak now!')
-    }
-
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript
-      console.log('🎤 Voice input result:', transcript)
       setUserInput(transcript)
     }
 
     recognition.onerror = (event: any) => {
-      console.error('🎤 Voice input error:', event.error)
       setIsRecording(false)
       if (event.error === 'no-speech') {
         alert(language === 'hinglish' ? 'Kuch sunai nahi diya. Dobara try karo.' : 'No speech detected. Try again.')
@@ -399,14 +319,12 @@ export default function PoetryCompanionPage() {
     }
 
     recognition.onend = () => {
-      console.log('🎤 Voice input ended')
       setIsRecording(false)
     }
 
     try {
       recognition.start()
     } catch (err) {
-      console.error('🎤 Failed to start:', err)
       setIsRecording(false)
     }
   }
@@ -420,14 +338,7 @@ export default function PoetryCompanionPage() {
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     const synth = window.speechSynthesis
 
-    console.log('===== TALK TO GOOGLE AI BUTTON CLICKED =====')
-    console.log('Voice conversation started')
-    console.log('SpeechRecognition available:', !!SpeechRecognition)
-    console.log('SpeechSynthesis available:', !!synth)
-    console.log('Current language:', language)
-
     if (!SpeechRecognition || !synth) {
-      console.warn('Voice not fully supported in this browser.')
       alert(language === 'hinglish' ? 'Voice feature supported nahi hai is browser me.' : 'Voice feature is not supported in this browser.')
       return
     }
@@ -443,17 +354,13 @@ export default function PoetryCompanionPage() {
         ? 'Kuch bhi puchho, main sun raha hoon.'
         : 'Ask me anything, I am listening.'
 
-    console.log('Creating intro utterance:', introText)
-
     const introUtterance = new SpeechSynthesisUtterance(introText)
     introUtterance.lang = language === 'hinglish' ? 'hi-IN' : 'en-US'
     introUtterance.rate = 0.9
     introUtterance.pitch = 1.0
     introUtterance.volume = 1.0
 
-    // Get voices synchronously (Chrome usually has them loaded already)
     const availableVoices = synth.getVoices()
-    console.log('Available voices:', availableVoices.length)
     
     if (availableVoices.length > 0) {
       const preferredVoice = availableVoices.find(voice => 
@@ -463,7 +370,6 @@ export default function PoetryCompanionPage() {
       )
       
       if (preferredVoice) {
-        console.log('Using voice:', preferredVoice.name)
         introUtterance.voice = preferredVoice
       }
     }
@@ -471,27 +377,18 @@ export default function PoetryCompanionPage() {
     let speechStarted = false
 
     introUtterance.onstart = () => {
-      console.log('✓ Intro speech STARTED')
       speechStarted = true
     }
 
     introUtterance.onerror = (event) => {
-      console.error('✗ Speech synthesis error:', event.error)
       setIsVoiceFlowRunning(false)
       alert(language === 'hinglish' ? 'Speech nahi chal paaya. Dobara try karo.' : 'Speech failed. Please try again.')
     }
 
     introUtterance.onend = () => {
-      console.log('✓ Intro speech ENDED')
-      
-      // Small delay before starting recognition
       setTimeout(() => {
-        console.log('Starting speech recognition...')
-        // Step 2: User ka question suno
         listenOnce(async (queryText) => {
           try {
-            // Don't fill textarea in voice conversation mode
-            console.log('User said:', queryText)
             
             // Step 3: Query Gemini ko bhejo as a general assistant
             const res = await fetch('/api/poetry-companion', {
@@ -515,25 +412,18 @@ export default function PoetryCompanionPage() {
                 ? 'Sorry, abhi jawab nahi laa paaya.'
                 : 'Sorry, I could not generate an answer.')
 
-            console.log('Gemini response (raw):', rawAnswer)
-
-            // Clean markdown for speech
             const cleanAnswer = cleanTextForSpeech(rawAnswer)
-            console.log('Gemini response (cleaned for speech):', cleanAnswer)
 
             // UI me bhi dikha do (latest answer on top) - show original with formatting
             setResults(prev => [rawAnswer, ...prev])
 
             // Step 4: Answer ko bolke sunao - use cleaned version
-            // Split into sentences to avoid Chrome speech synthesis bug with long text
             const sentences = cleanAnswer.match(/[^.!?]+[.!?]+/g) || [cleanAnswer]
-            console.log('Split into', sentences.length, 'sentences')
             
             let currentSentenceIndex = 0
             
             const speakNextSentence = () => {
               if (currentSentenceIndex >= sentences.length) {
-                console.log('✓ All sentences spoken - resetting to original state')
                 speechCompleted = true
                 setIsVoiceFlowRunning(false)
                 setIsRecording(false)
@@ -541,7 +431,6 @@ export default function PoetryCompanionPage() {
               }
 
               const sentence = sentences[currentSentenceIndex].trim()
-              console.log(`Speaking sentence ${currentSentenceIndex + 1}/${sentences.length}:`, sentence)
               
               const answerUtterance = new SpeechSynthesisUtterance(sentence)
               answerUtterance.lang = language === 'hinglish' ? 'hi-IN' : 'en-US'
@@ -560,14 +449,11 @@ export default function PoetryCompanionPage() {
               }
 
               answerUtterance.onend = () => {
-                console.log(`✓ Sentence ${currentSentenceIndex + 1} completed`)
                 currentSentenceIndex++
-                // Small delay between sentences
                 setTimeout(() => speakNextSentence(), 100)
               }
 
               answerUtterance.onerror = (event) => {
-                console.error('✗ Sentence speech error:', event.error)
                 speechCompleted = true
                 setIsVoiceFlowRunning(false)
                 setIsRecording(false)
@@ -578,15 +464,11 @@ export default function PoetryCompanionPage() {
 
             let speechCompleted = false
             
-            // Start speaking
-            console.log('Starting to speak answer...')
             speakNextSentence()
             
-            // Fallback timeout for entire answer
             const totalEstimatedDuration = (cleanAnswer.split(' ').length / 2.5) * 1000 + 10000
             setTimeout(() => {
               if (!speechCompleted) {
-                console.warn('⚠ Answer speech timeout, forcing reset')
                 synth.cancel()
                 speechCompleted = true
                 setIsVoiceFlowRunning(false)
@@ -594,7 +476,6 @@ export default function PoetryCompanionPage() {
               }
             }, totalEstimatedDuration)
           } catch (err) {
-            console.error('Error in Gemini assistant flow:', err)
             setIsVoiceFlowRunning(false)
             alert(language === 'hinglish' ? 'Kuch galat ho gaya. Dobara try karo.' : 'Something went wrong. Please try again.')
           }
@@ -602,14 +483,10 @@ export default function PoetryCompanionPage() {
       }, 500)
     }
 
-    // Speak the intro - this should trigger immediately
-    console.log('Calling synth.speak()...')
     synth.speak(introUtterance)
     
-    // Fallback: if speech doesn't start in 2 seconds, skip to listening
     setTimeout(() => {
       if (!speechStarted && isVoiceFlowRunning) {
-        console.warn('⚠ Speech did not start, skipping to listening')
         synth.cancel()
         introUtterance.onend?.(new Event('end') as any)
       }
