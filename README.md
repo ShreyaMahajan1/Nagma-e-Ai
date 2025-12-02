@@ -202,26 +202,6 @@ The app uses Google Gemini 2.5 Flash which has generous free tier limits:
 
 ---
 
-## 🚀 Deployment
-
-### Deploy to Vercel (Recommended)
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
-
-2. **Import to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Set root directory to `nextjs-app`
-   - Add `GEMINI_API_KEY` environment variable
-   - Deploy!
-
----
 
 ## 🤝 Contributing
 
@@ -259,10 +239,6 @@ Made with ❤️ and AI
 
 ---
 
-## 📸 Screenshots
-
-> Add screenshots of your app here after deployment
-
----
 
 **⭐ If you like this project, please give it a star on GitHub!**
+
